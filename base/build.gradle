@@ -1,0 +1,58 @@
+apply plugin: 'com.android.feature'
+apply from: '../config_module.gradle'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+  baseFeature true
+}
+
+dependencies {
+
+  application project(':app-installed')
+  feature project(':feature-browser')
+
+  //KOTLIN
+  api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+  api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+  //SUPPORT
+  api "com.android.support:appcompat-v7:$android_support_version"
+  api "com.android.support:support-v4:$android_support_version"
+  api "com.android.support.constraint:constraint-layout:$android_constraint_layout"
+  api "com.android.support:recyclerview-v7:$android_support_version"
+
+  //DAGGER
+  api "com.google.dagger:dagger:$dagger_version"
+  api "com.google.dagger:dagger-android-support:$dagger_version"
+  kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
+  //RETROFIT
+  api "com.squareup.retrofit2:retrofit:$retrofit_version"
+  api "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+  api "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+  api "com.squareup.okhttp3:okhttp:$okhttp_version"
+  api "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+
+  //RXJAVA
+  api "io.reactivex.rxjava2:rxjava:$rxjava_version"
+  api "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
+  api "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
+
+  //Fresco
+  api "com.facebook.fresco:fresco:$fresco_version"
+  api "com.facebook.fresco:imagepipeline-okhttp3:$fresco_version"
+
+  //Moshi
+  api "com.squareup.moshi:moshi:$moshi_version"
+  api "com.squareup.moshi:moshi-kotlin:$moshi_version"
+
+  //--------DEV TOOLS-------
+  api "com.facebook.stetho:stetho:$stetho_version"
+  api "com.facebook.stetho:stetho-okhttp3:$stetho_version"
+
+  //LEAK CANARY
+  debugApi "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
+  releaseApi "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
+
+}

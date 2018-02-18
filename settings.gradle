@@ -1,0 +1,1 @@
+include ':feature-browser', ':app-installed', ':base', ':app-instant'

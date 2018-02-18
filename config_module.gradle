@@ -1,0 +1,43 @@
+apply from: '../config_base.gradle'
+apply from: '../config_flavors.gradle'
+
+
+ext {
+  android {
+    compileSdkVersion compile_sdk_version
+    buildToolsVersion build_tool_version
+
+    defaultConfig {
+      minSdkVersion min_sdk_version
+      targetSdkVersion target_sdk_version
+      versionCode retrieveVersionCode
+      versionName retrieveVersionName
+      multiDexEnabled true
+
+      testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+      release {
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), '../proguard-rules.pro'
+        minifyEnabled false
+      }
+      debug {
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), '../proguard-rules.pro'
+        minifyEnabled false
+      }
+    }
+
+    compileOptions {
+      sourceCompatibility JavaVersion.VERSION_1_8
+      targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+      exclude 'META-INF/rxjava.properties'
+      exclude 'META-INF/LICENSE'
+    }
+  }
+
+}
+
+

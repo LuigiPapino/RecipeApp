@@ -1,0 +1,7 @@
+apply plugin: 'com.android.instantapp'
+apply from: '../config_module.gradle'
+
+dependencies {
+    implementation project(':feature-browser')
+    implementation project(':base')
+}

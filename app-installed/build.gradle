@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+apply from: '../config_module.gradle'
+
+
+android {
+  signingConfigs {
+    debug {
+      keyAlias 'key-debug'
+      keyPassword 'hellohello'
+      storeFile file('../keystores/keystore-debug')
+      storePassword 'hellohello'
+    }
+    release {
+      keyAlias 'key-release'
+      keyPassword 'hellohello'
+      storeFile file('../keystores/keystore-release')
+      storePassword 'hellohello'
+    }
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      signingConfig signingConfigs.release
+      applicationIdSuffix ".release"
+      debuggable false
+    }
+    debug {
+      minifyEnabled false
+      signingConfig signingConfigs.debug
+      applicationIdSuffix ".debug"
+      debuggable true
+    }
+  }
+
+  productFlavors {
+    pizza {
+      dimension "organization"
+      applicationIdSuffix ".pizza"
+    }
+    mozzarella {
+      dimension "organization"
+      applicationIdSuffix ".mozzarella"
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+dependencies {
+  implementation project(':feature-browser')
+  implementation project(':base')
+}
