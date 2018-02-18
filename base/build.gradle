@@ -5,6 +5,17 @@ apply plugin: 'kotlin-kapt'
 
 android {
   baseFeature true
+
+  productFlavors {
+    pizza {
+      dimension "organization"
+      buildConfigField("String", "BASE_API_URL", '"http://mobile.asosservices.com/"')
+    }
+    mozzarella {
+      dimension "organization"
+      buildConfigField("String", "BASE_API_URL", '"http://mobile.asosservices.com/"')
+    }
+  }
 }
 
 dependencies {
@@ -54,5 +65,4 @@ dependencies {
   //LEAK CANARY
   debugApi "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
   releaseApi "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
-
 }

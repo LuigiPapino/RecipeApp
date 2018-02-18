@@ -9,7 +9,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app-installed" />
-            <option value="$PROJECT_DIR$/app-instant" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/feature-browser" />
           </set>
