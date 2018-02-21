@@ -3,7 +3,7 @@
     package="net.dragora.recipeapp.feature_browser">
 
   <application>
-    <activity android:name=".BrowserActivity">
+    <activity android:name=".ui.BrowserActivity">
       <intent-filter android:order="1">
         <action android:name="android.intent.action.VIEW"/>
 

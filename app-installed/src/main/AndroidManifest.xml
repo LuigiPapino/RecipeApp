@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.dragora.recipeapp.app">
   <application>
-    <activity android:name="net.dragora.recipeapp.feature_browser.BrowserActivity">
+    <activity android:name="net.dragora.recipeapp.feature_browser.ui.BrowserActivity">
       <intent-filter android:order="1">
         <action android:name="android.intent.action.VIEW"/>
 

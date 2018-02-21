@@ -1,39 +1,87 @@
 package net.dragora.recipeapp.base.data.repository
 
 import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import net.dragora.recipeapp.base.data.network.RecipeApiService
 import net.dragora.recipeapp.base.data.network.RecipePayload
-import net.dragora.recipeapp.base.data.repository.RetrieveEvent.Failed
-import net.dragora.recipeapp.base.data.repository.RetrieveEvent.Loading
-import net.dragora.recipeapp.base.data.repository.RetrieveEvent.Success
+import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.FetchError
+import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.Fetched
+import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.Fetching
+import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.Idle
+import net.dragora.recipeapp.base.tools.rxjava.LokiSchedulers
 
 /**
  * Created by luigipapino on 18/02/2018.
  */
-class RecipeRepository(private val recipeApiService: RecipeApiService) {
+class RecipeRepository internal constructor(private val recipeApiService: RecipeApiService) {
 
-    fun retrieveRecipes(): Observable<RetrieveEvent<List<RecipePayload>>> {
+    private val recipeSubject = BehaviorSubject.createDefault<RetrieveEvent>(Idle())
 
-        return Observable.create { emitter ->
-            emitter.onNext(Loading())
+    fun retrieveRecipes(): Observable<RetrieveEvent> {
+        refreshRecipes()
+        return recipeSubject
+    }
 
-            recipeApiService.getRecipes()
-                    .subscribe(
-                            {
-                                emitter.onNext(Success(it))
-                            },
-                            {
-                                emitter.onNext(Failed(it.message))
-                            })
+    private fun refreshRecipes() {
+        synchronized(recipeSubject) {
+            when (recipeSubject.value) {
+                is Idle,
+                is FetchError -> {
+                    fetchRecipes()
+                }
+                is Fetching -> {
+                }
+                is Fetched -> {
+                }
+
+            }
         }
 
     }
-}
 
-sealed class RetrieveEvent<T> {
+    private fun fetchRecipes() {
+        recipeApiService.getRecipes()
+                .subscribeOn(LokiSchedulers.NETWORK)
+                .observeOn(LokiSchedulers.COMPUTATION)
+                .subscribe(
+                        {
+                            recipeSubject.onNext(Fetched(it.toModels()))
+                        },
+                        {
+                            recipeSubject.onNext(FetchError(it.message ?: ""))
 
-    class Failed<T>(val reason: String?) : RetrieveEvent<T>()
-    class Loading<T>() : RetrieveEvent<T>()
-    class Success<T>(val data: T) : RetrieveEvent<T>()
+                        }
+                )
 
+    }
+
+    sealed class RetrieveEvent {
+        class Idle : RetrieveEvent()
+        class Fetching : RetrieveEvent()
+        data class Fetched(val data: List<RecipeModel>) : RetrieveEvent()
+        data class FetchError(val message: String) : RetrieveEvent()
+
+    }
+
+    companion object {
+
+        private fun List<RecipePayload>?.toModels(): List<RecipeModel> {
+            return this?.map { it.toModel() } ?: emptyList()
+        }
+
+        /**
+         * This is useless at the moment.
+         * It's just to protect the presentation layer from changes in the domain layer
+         */
+        private fun RecipePayload.toModel(): RecipeModel {
+            val ingredients =
+                    this.ingredients
+                            .map { IngredientModel(it.quantity, it.name, it.type) }
+            val steps = this.steps
+            val timers = this.timers
+
+            val model = RecipeModel(name, ingredients, steps, timers, imageURL, originalURL)
+            return model
+        }
+    }
 }

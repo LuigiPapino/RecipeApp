@@ -4,7 +4,7 @@ import dagger.Component
 import dagger.Module
 import net.dragora.recipeapp.base.di.BaseInjector
 import net.dragora.recipeapp.base.di.BaseSubComponent
-import net.dragora.recipeapp.feature_browser.BrowserActivity
+import net.dragora.recipeapp.feature_browser.ui.BrowserActivity
 import javax.inject.Scope
 import kotlin.annotation.AnnotationRetention.RUNTIME
 

@@ -1,7 +1,7 @@
 package net.dragora.recipeapp.base.di
 
 import dagger.android.AndroidInjector
-import net.dragora.recipeapp.base.RecipeApplication
+import net.dragora.recipeapp.base.LokiApplication
 
 /**
  * Created by luigipapino on 18/02/2018.
@@ -25,5 +25,5 @@ interface BaseInjector<T : ApplicationProvider> : AndroidInjector<T> {
 
 interface ApplicationProvider {
 
-    fun provideApp(): RecipeApplication
+    fun provideApp(): LokiApplication
 }

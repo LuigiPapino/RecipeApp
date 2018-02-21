@@ -30,6 +30,8 @@ ext {
   moshi_version = "1.5.0"
   gravitysnaphelper_version = "1.5"
   swipelayout_version = "1.4.0"
+  base_recycler_view_version = "2.9.34"
+
 
   //TEST DEPENDENCIES
   espresso_version = "2.2.2"

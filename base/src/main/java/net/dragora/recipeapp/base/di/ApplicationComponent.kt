@@ -5,7 +5,7 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import dagger.android.AndroidInjector
-import net.dragora.recipeapp.base.RecipeApplication
+import net.dragora.recipeapp.base.LokiApplication
 import net.dragora.recipeapp.base.di.module.DevTool
 import net.dragora.recipeapp.base.di.module.InitAction
 import net.dragora.recipeapp.base.di.module.InitModule
@@ -19,7 +19,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(
         modules = [AppModule::class, InitModule::class, NetworkModule::class, RepositoryModule::class])
-interface ApplicationComponent : AndroidInjector<RecipeApplication> {
+interface ApplicationComponent : AndroidInjector<LokiApplication> {
 
     @get:InitAction
     val initActions: Set<() -> Unit>
@@ -31,7 +31,7 @@ interface ApplicationComponent : AndroidInjector<RecipeApplication> {
     fun baseSubcomponentBuilder(): BaseSubComponent.Builder
 
     @Component.Builder
-    abstract class Builder : AndroidInjector.Builder<RecipeApplication>()
+    abstract class Builder : AndroidInjector.Builder<LokiApplication>()
 }
 
 @Module
@@ -39,6 +39,6 @@ internal object AppModule {
     @Provides
     @Singleton
     @JvmStatic
-    internal fun provideApp(app: RecipeApplication): Application = app
+    internal fun provideApp(app: LokiApplication): Application = app
 }
 

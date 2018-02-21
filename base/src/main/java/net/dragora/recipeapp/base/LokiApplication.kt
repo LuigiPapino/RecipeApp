@@ -10,7 +10,7 @@ import net.dragora.recipeapp.base.di.DaggerApplicationComponent
 /**
  * Created by luigipapino on 18/02/2018.
  */
-class RecipeApplication : Application() {
+class LokiApplication : Application() {
 
     private lateinit var appComponent: ApplicationComponent
 
