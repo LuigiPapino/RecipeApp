@@ -9,8 +9,12 @@ data class RecipeModel(
         val steps: List<String>,
         val timers: List<Int>,
         val imageURL: String,
-        val originalURL: String?
-)
+        val originalURL: String?,
+        val difficulty: Difficulty,
+        val totalTimeSeconds: Int
+) {
+    enum class Difficulty { Easy, Medium, Hard }
+}
 
 data class IngredientModel(
         val quantity: String,

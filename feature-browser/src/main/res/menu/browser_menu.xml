@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <item
+      android:id="@+id/browser_action_search"
+      android:icon="@drawable/browser_search"
+      android:title="@string/browser_search"
+      app:actionViewClass="android.support.v7.widget.SearchView"
+      app:showAsAction="always"/>
+
+  <item
+      android:id="@+id/browser_action_filter_difficulty"
+      android:icon="@drawable/browser_filter"
+      android:title="@string/browser_search"
+      app:showAsAction="always"/>
+
+  <item
+      android:id="@+id/browser_action_filter_duration"
+      android:icon="@drawable/browser_timer"
+      android:title="@string/browser_search"
+      app:showAsAction="always"
+      />
+
+</menu>

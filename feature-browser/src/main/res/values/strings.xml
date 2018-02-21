@@ -1,2 +1,8 @@
 <resources>
+  <string name="browser_search">Search</string>
+  <string name="browser_difficulty">Difficulty</string>
+  <string name="browser_duration">Duration</string>
+  <string name="browser_empty">Try to search something else :p </string>
+
+
 </resources>

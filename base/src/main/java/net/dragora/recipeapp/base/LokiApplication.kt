@@ -38,7 +38,7 @@ class LokiApplication : Application() {
                     .detectLeakedRegistrationObjects()
                     .detectLeakedSqlLiteObjects()
                     .penaltyLog()
-                    .penaltyDeath()
+
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 vmPolicyBuilder.detectContentUriWithoutPermission()

@@ -1,13 +1,13 @@
 package net.dragora.recipeapp.base.data.repository
 
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.Single
+import io.reactivex.SingleEmitter
 import net.dragora.recipeapp.base.data.network.RecipeApiService
 import net.dragora.recipeapp.base.data.network.RecipePayload
-import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.FetchError
-import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.Fetched
-import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.Fetching
-import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.Idle
+import net.dragora.recipeapp.base.data.repository.RecipeModel.Difficulty
+import net.dragora.recipeapp.base.data.repository.RecipeModel.Difficulty.Hard
+import net.dragora.recipeapp.base.data.repository.RecipeModel.Difficulty.Medium
+import net.dragora.recipeapp.base.tools.Loggy
 import net.dragora.recipeapp.base.tools.rxjava.LokiSchedulers
 
 /**
@@ -15,41 +15,43 @@ import net.dragora.recipeapp.base.tools.rxjava.LokiSchedulers
  */
 class RecipeRepository internal constructor(private val recipeApiService: RecipeApiService) {
 
-    private val recipeSubject = BehaviorSubject.createDefault<RetrieveEvent>(Idle())
+    private var data: List<RecipePayload>? = null
 
-    fun retrieveRecipes(): Observable<RetrieveEvent> {
-        refreshRecipes()
-        return recipeSubject
-    }
-
-    private fun refreshRecipes() {
-        synchronized(recipeSubject) {
-            when (recipeSubject.value) {
-                is Idle,
-                is FetchError -> {
-                    fetchRecipes()
-                }
-                is Fetching -> {
-                }
-                is Fetched -> {
-                }
-
-            }
+    /**
+     * Non thread safe
+     */
+    fun retrieveRecipes(query: String? = null): Single<List<RecipeModel>> {
+        val cache = getCachedData()
+        if (cache != null) {
+            return Single.just(getModels(query))
         }
-
+        return Single.create {
+            fetchRecipes(it, query)
+        }
     }
 
-    private fun fetchRecipes() {
+    private fun getCachedData(): List<RecipePayload>? {
+        return data
+    }
+
+    private fun getModels(query: String?): List<RecipeModel> {
+        return data.toModels().filter { it.matchQuery(query) }
+    }
+
+    private fun fetchRecipes(
+            emitter: SingleEmitter<List<RecipeModel>>,
+            query: String?) {
         recipeApiService.getRecipes()
                 .subscribeOn(LokiSchedulers.NETWORK)
                 .observeOn(LokiSchedulers.COMPUTATION)
                 .subscribe(
                         {
-                            recipeSubject.onNext(Fetched(it.toModels()))
+                            data = it
+                            emitter.onSuccess(getModels(query))
                         },
                         {
-                            recipeSubject.onNext(FetchError(it.message ?: ""))
-
+                            Loggy.e(it, TAG)
+                            emitter.onError(RepositoryException(it))
                         }
                 )
 
@@ -63,8 +65,11 @@ class RecipeRepository internal constructor(private val recipeApiService: Recipe
 
     }
 
+    class RepositoryException(cause: Throwable) : Exception(cause)
+
     companion object {
 
+        private const val TAG = "RecipeRepository"
         private fun List<RecipePayload>?.toModels(): List<RecipeModel> {
             return this?.map { it.toModel() } ?: emptyList()
         }
@@ -79,9 +84,34 @@ class RecipeRepository internal constructor(private val recipeApiService: Recipe
                             .map { IngredientModel(it.quantity, it.name, it.type) }
             val steps = this.steps
             val timers = this.timers
+            val difficulty = when (steps.size) {
+                in 0..3 -> Difficulty.Easy
+                in 4..8 -> Medium
+                else -> Hard
+            }
+            val totalTime = this.timers.reduce { acc, i -> acc + i }
 
-            val model = RecipeModel(name, ingredients, steps, timers, imageURL, originalURL)
+            val model = RecipeModel(name, ingredients, steps, timers, imageURL, originalURL,
+                    difficulty, totalTime)
             return model
         }
+
+        private fun RecipeModel.matchQuery(query: String?): Boolean {
+            query ?: return true
+
+            return when {
+                name.contains(query, true) -> true
+                ingredients.any { it.matchQuery(query) } -> true
+                steps.any { it.contains(query, true) } -> true
+                else -> false
+            }
+        }
+
+        private fun IngredientModel.matchQuery(query: String?): Boolean {
+            query ?: return true
+            return this.name.contains(query, true) || this.type.contains(query, true)
+
+        }
+
     }
 }

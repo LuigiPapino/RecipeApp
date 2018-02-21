@@ -4,11 +4,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import net.dragora.recipeapp.base.data.repository.RecipeModel
 import net.dragora.recipeapp.base.data.repository.RecipeRepository
-import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.FetchError
-import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.Fetched
-import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.Fetching
-import net.dragora.recipeapp.base.data.repository.RecipeRepository.RetrieveEvent.Idle
-import net.dragora.recipeapp.base.tools.Loggy
 import net.dragora.recipeapp.base.tools.rxjava.LokiSchedulers
 import net.dragora.recipeapp.feature_browser.di.BrowserScope
 import javax.inject.Inject
@@ -28,28 +23,17 @@ class BrowserUseCase @Inject constructor(private val recipeRepository: RecipeRep
         this.callback = callback
     }
 
-    fun loadRecipes() {
+    fun loadRecipes(query: String? = null) {
         disposables += recipeRepository
-                .retrieveRecipes()
+                .retrieveRecipes(query)
                 .observeOn(LokiSchedulers.MAIN)
-                .doOnSubscribe { callback?.onLoading() }
-                .subscribe {
-                    Loggy.d("retrieveRecipes event ${it}")
-                    when (it) {
-                        is Idle -> {
-                            /**ignore**/
-                        }
-                        is Fetching -> {
-                            callback?.onLoading()
-                        }
-                        is Fetched -> {
-                            callback?.onRecipesRetrieved(it.data)
-                        }
-                        is FetchError -> {
-                            callback?.onError(it.message)
-                        }
-                    }
-                }
+                .subscribe(
+                        {
+                            callback?.onRecipesRetrieved(it)
+                        },
+                        {
+                            callback?.onError(it.message ?: "")
+                        })
     }
 
     fun dispose() {
@@ -59,9 +43,13 @@ class BrowserUseCase @Inject constructor(private val recipeRepository: RecipeRep
 
     interface Callback {
         fun onError(message: String)
-        fun onLoading()
         fun onRecipesRetrieved(recipe: List<RecipeModel>)
 
     }
 
+    companion object {
+
+    }
+
 }
+

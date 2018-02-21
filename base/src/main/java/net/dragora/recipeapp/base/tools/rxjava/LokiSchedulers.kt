@@ -13,5 +13,12 @@ class LokiSchedulers {
         val NETWORK = Schedulers.io()
         val MAIN = AndroidSchedulers.mainThread()
 
+        fun ui(action: () -> Unit) {
+            MAIN.scheduleDirect(action)
+        }
+
+        fun worker(action: () -> Unit) {
+            COMPUTATION.scheduleDirect(action)
+        }
     }
 }

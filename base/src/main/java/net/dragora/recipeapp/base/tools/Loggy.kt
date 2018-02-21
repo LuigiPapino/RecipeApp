@@ -11,4 +11,8 @@ object Loggy {
     fun d(msg: String, tag: String = TAG) {
         Log.d(tag, msg)
     }
+
+    fun e(tr: Throwable, tag: String = TAG) {
+        Log.e(tag, tr.message, tr)
+    }
 }
