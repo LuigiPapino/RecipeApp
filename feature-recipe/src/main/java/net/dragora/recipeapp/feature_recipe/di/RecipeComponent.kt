@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import net.dragora.recipeapp.base.di.BaseInjector
 import net.dragora.recipeapp.base.di.BaseSubComponent
+import net.dragora.recipeapp.base.route.HomeRoute
 import net.dragora.recipeapp.base.route.RecipeRoute
 import net.dragora.recipeapp.base.ui.StringRetriever
 import net.dragora.recipeapp.feature_recipe.ui.RecipeActivity
@@ -42,5 +43,10 @@ object RecipeModule {
     @JvmStatic
     fun provideRouteData(context: RecipeActivity): RecipeRoute.Data = RecipeRoute.Data(
             context.intent.data)
+
+    @Provides
+    @RecipeScope
+    @JvmStatic
+    fun provideRecipeRoute(context: RecipeActivity): HomeRoute = HomeRoute(context)
 
 }

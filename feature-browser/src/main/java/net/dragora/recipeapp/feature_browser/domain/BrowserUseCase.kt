@@ -8,6 +8,7 @@ import net.dragora.recipeapp.base.data.repository.RecipeModelFilter.Difficulty
 import net.dragora.recipeapp.base.data.repository.RecipeModelFilter.Duration
 import net.dragora.recipeapp.base.data.repository.RecipeModelFilter.Query
 import net.dragora.recipeapp.base.data.repository.RecipeRepository
+import net.dragora.recipeapp.base.route.RecipeRoute
 import net.dragora.recipeapp.base.tools.rxjava.LokiSchedulers
 import net.dragora.recipeapp.feature_browser.di.BrowserScope
 import javax.inject.Inject
@@ -16,7 +17,8 @@ import javax.inject.Inject
  * Created by luigipapino on 18/02/2018.
  */
 @BrowserScope
-class BrowserUseCase @Inject constructor(private val recipeRepository: RecipeRepository) {
+class BrowserUseCase @Inject constructor(private val recipeRepository: RecipeRepository,
+        private val recipeRoute: RecipeRoute) {
 
     private var disposables = CompositeDisposable()
 
@@ -65,6 +67,13 @@ class BrowserUseCase @Inject constructor(private val recipeRepository: RecipeRep
 
     companion object {
 
+    }
+
+    fun startRecipe(recipeId: Int) {
+        recipeRoute.start(RecipeRoute.Data().apply {
+            this.recipeId = recipeId.toString()
+            this.isEmbedded = true.toString()
+        })
     }
 
 }

@@ -6,16 +6,16 @@
     <activity
         android:name=".ui.BrowserActivity"
         android:theme="@style/AppTheme">
-      <intent-filter android:order="1">
+      <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
 
-        <category android:name="android.intent.category.BROWSABLE"/>
         <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
 
         <data
-            android:host="dragora.net"
-            android:pathPattern="/.*"
-            android:scheme="https"/>
+            android:host="@string/route_app_host_screens"
+            android:pathPrefix="@string/route_app_path_home"
+            android:scheme="@string/route_app_scheme"/>
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>

@@ -19,6 +19,7 @@ class RecipePresenter @Inject constructor(private val useCase: RecipeUseCase,
 
     interface View {
         fun show(viewModel: ViewModel)
+        fun back()
 
     }
 
@@ -97,4 +98,12 @@ class RecipePresenter @Inject constructor(private val useCase: RecipeUseCase,
     }
 
     private var view: View? = null
+    fun clickUp() {
+        if (useCase.isEmbedded) {
+            view?.back()
+        } else {
+            useCase.navigateUp()
+            view?.back()
+        }
+    }
 }

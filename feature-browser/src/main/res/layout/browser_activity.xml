@@ -60,13 +60,23 @@
 
           />
     </LinearLayout>
+    <ProgressBar
+        android:id="@+id/browser_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_scrollFlags="scroll|enterAlways"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+
+        />
   </android.support.design.widget.AppBarLayout>
+
 
   <android.support.v4.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
-
       >
 
     <android.support.v7.widget.RecyclerView

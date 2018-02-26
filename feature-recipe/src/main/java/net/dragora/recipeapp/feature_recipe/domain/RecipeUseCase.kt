@@ -3,6 +3,8 @@ package net.dragora.recipeapp.feature_recipe.domain
 import io.reactivex.disposables.CompositeDisposable
 import net.dragora.recipeapp.base.data.repository.RecipeModel
 import net.dragora.recipeapp.base.data.repository.RecipeRepository
+import net.dragora.recipeapp.base.route.HomeRoute
+import net.dragora.recipeapp.base.route.HomeRoute.Data
 import net.dragora.recipeapp.base.route.RecipeRoute
 import net.dragora.recipeapp.base.tools.rxjava.LokiSchedulers
 import net.dragora.recipeapp.feature_recipe.di.RecipeScope
@@ -14,10 +16,13 @@ import javax.inject.Inject
 @RecipeScope
 class RecipeUseCase @Inject constructor(
         private val recipeRepository: RecipeRepository,
-        private val routeData: RecipeRoute.Data
+        private val routeData: RecipeRoute.Data,
+        private val homeRoute: HomeRoute
 ) {
 
     private val recipeId = routeData.recipeId?.toInt()
+    val isEmbedded = routeData.isEmbedded?.toBoolean() ?: false
+
     private var disposables = CompositeDisposable()
 
     interface Callback {
@@ -58,5 +63,9 @@ class RecipeUseCase @Inject constructor(
                             })
         }
 
+    }
+
+    fun navigateUp() {
+        homeRoute.start(Data())
     }
 }

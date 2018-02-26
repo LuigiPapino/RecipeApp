@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import net.dragora.recipeapp.base.BuildType.DEBUG
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -50,7 +51,7 @@ class RecipeModelStorage @Inject constructor(private val prefs: SharedPreference
         private const val KEY_RECIPES = "recipes"
         private const val KEY_RECIPES_TIME = "recipes-time"
 
-        private const val TTL = 60 * 60 * 1000
+        private val TTL = if (DEBUG.isCurrentBuild) 30 * 1000 else 60 * 60 * 1000
 
     }
 }

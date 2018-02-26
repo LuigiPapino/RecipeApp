@@ -44,6 +44,7 @@ class RecipeRepository internal constructor(
     private fun fetchRecipes(
             emitter: SingleEmitter<List<RecipeModel>>,
             filters: List<RecipeModelFilter>) {
+        Loggy.d("fetchRecipes()")
         recipeApiService.getRecipes()
                 .subscribeOn(LokiSchedulers.NETWORK)
                 .observeOn(LokiSchedulers.NETWORK)

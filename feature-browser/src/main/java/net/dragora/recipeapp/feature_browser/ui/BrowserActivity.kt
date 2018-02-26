@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.browser_activity.browser_filter_difficulty
 import kotlinx.android.synthetic.main.browser_activity.browser_filter_time
+import kotlinx.android.synthetic.main.browser_activity.browser_progress
 import kotlinx.android.synthetic.main.browser_activity.browser_recycler
 import kotlinx.android.synthetic.main.browser_activity.browser_toolbar
 import net.dragora.recipeapp.base.tools.android.visible
@@ -74,8 +75,6 @@ class BrowserActivity : LokiActivity(R.layout.browser_activity), View {
         return true
     }
 
-
-
     override fun showCells(cells: List<CellViewModel>) {
         cellsAdapter?.setNewData(cells)
     }
@@ -94,10 +93,11 @@ class BrowserActivity : LokiActivity(R.layout.browser_activity), View {
     }
 
     override fun onLoading(isLoading: Boolean) {
-
+        browser_progress.visible(isLoading)
     }
 
     override fun showMessage(message: String) {
+        AlertDialog.Builder(this).setMessage(message).show()
     }
 
     override fun showFilterChoices(type: FilterType, items: Array<String>) {
