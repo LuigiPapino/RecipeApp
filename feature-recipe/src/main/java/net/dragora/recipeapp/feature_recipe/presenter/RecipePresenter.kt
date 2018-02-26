@@ -20,6 +20,7 @@ class RecipePresenter @Inject constructor(private val useCase: RecipeUseCase,
     interface View {
         fun show(viewModel: ViewModel)
         fun back()
+        fun showMessage(message: String)
 
     }
 
@@ -59,12 +60,11 @@ class RecipePresenter @Inject constructor(private val useCase: RecipeUseCase,
     fun init(view: View) {
         this.view = view
         useCase.init(this)
-
         useCase.loadRecipe()
-
     }
 
     override fun recipeNotFound() {
+        //TODO I'm lazy
     }
 
     override fun onRecipeRetrieved(recipe: RecipeModel) {
@@ -90,6 +90,7 @@ class RecipePresenter @Inject constructor(private val useCase: RecipeUseCase,
     }
 
     override fun onError(message: String) {
+        view?.showMessage(message)
     }
 
     fun destroy() {
@@ -97,7 +98,6 @@ class RecipePresenter @Inject constructor(private val useCase: RecipeUseCase,
         view = null
     }
 
-    private var view: View? = null
     fun clickUp() {
         if (useCase.isEmbedded) {
             view?.back()
@@ -106,4 +106,7 @@ class RecipePresenter @Inject constructor(private val useCase: RecipeUseCase,
             view?.back()
         }
     }
+
+    private var view: View? = null
+
 }

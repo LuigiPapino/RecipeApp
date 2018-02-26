@@ -34,6 +34,9 @@ class RecipeRepository internal constructor(
         }
     }
 
+    /**
+     * Non thread safe
+     */
     fun retrieveRecipe(recipeId: Int): Single<RecipeModel> {
         return retrieveRecipes(emptyList())
                 .map {

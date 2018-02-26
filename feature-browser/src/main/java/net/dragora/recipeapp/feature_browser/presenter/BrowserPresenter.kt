@@ -58,7 +58,7 @@ class BrowserPresenter @Inject constructor(
         )
     }
 
-    internal fun init(view: View) {
+    fun init(view: View) {
         this.view = view
         FilterType.values().forEach { view.setFilterChip(it, false, "") }
 

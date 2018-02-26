@@ -1,6 +1,7 @@
 package net.dragora.recipeapp.feature_recipe.ui
 
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.recipe_activity.recipe_image
@@ -14,7 +15,6 @@ import net.dragora.recipeapp.feature_recipe.presenter.RecipePresenter.ViewModel
 import javax.inject.Inject
 
 class RecipeActivity : LokiActivity(R.layout.recipe_activity), RecipePresenter.View {
-
 
     @Inject
     internal lateinit var presenter: RecipePresenter
@@ -46,6 +46,10 @@ class RecipeActivity : LokiActivity(R.layout.recipe_activity), RecipePresenter.V
         supportActionBar?.title = viewModel.name
         title = viewModel.name
         adapter.setNewData(viewModel.rows)
+    }
+
+    override fun showMessage(message: String) {
+        AlertDialog.Builder(this).setMessage(message).show()
     }
 
     override fun back() {

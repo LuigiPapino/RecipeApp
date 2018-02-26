@@ -4,7 +4,7 @@ import dagger.android.AndroidInjector
 import net.dragora.recipeapp.base.LokiApplication
 
 /**
- * Created by luigipapino on 18/02/2018.
+ * https://medium.com/@luigi.papino/dagger2-for-modular-architecture-332e1250a85f
  */
 interface BaseInjector<T : ApplicationProvider> : AndroidInjector<T> {
 

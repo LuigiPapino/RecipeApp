@@ -20,9 +20,11 @@ import javax.inject.Inject
 class BrowserUseCase @Inject constructor(private val recipeRepository: RecipeRepository,
         private val recipeRoute: RecipeRoute) {
 
-    private var disposables = CompositeDisposable()
+    interface Callback {
+        fun onError(message: String)
+        fun onRecipesRetrieved(recipe: List<RecipeModel>)
 
-    private var callback: Callback? = null
+    }
 
     fun init(callback: Callback) {
         disposables = CompositeDisposable()
@@ -59,22 +61,16 @@ class BrowserUseCase @Inject constructor(private val recipeRepository: RecipeRep
         disposables.dispose()
     }
 
-    interface Callback {
-        fun onError(message: String)
-        fun onRecipesRetrieved(recipe: List<RecipeModel>)
-
-    }
-
-    companion object {
-
-    }
-
     fun startRecipe(recipeId: Int) {
         recipeRoute.start(RecipeRoute.Data().apply {
             this.recipeId = recipeId.toString()
             this.isEmbedded = true.toString()
         })
     }
+
+    private var disposables = CompositeDisposable()
+
+    private var callback: Callback? = null
 
 }
 

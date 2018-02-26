@@ -20,11 +20,6 @@ class RecipeUseCase @Inject constructor(
         private val homeRoute: HomeRoute
 ) {
 
-    private val recipeId = routeData.recipeId?.toInt()
-    val isEmbedded = routeData.isEmbedded?.toBoolean() ?: false
-
-    private var disposables = CompositeDisposable()
-
     interface Callback {
         fun recipeNotFound()
 
@@ -34,17 +29,18 @@ class RecipeUseCase @Inject constructor(
 
     }
 
-    internal fun init(callback: Callback) {
+    val isEmbedded = routeData.isEmbedded?.toBoolean() ?: false
+
+    fun init(callback: Callback) {
         disposables = CompositeDisposable()
         this.callback = callback
     }
 
-    internal fun dispose() {
+    fun dispose() {
         disposables.dispose()
         this.callback = null
     }
 
-    private var callback: RecipeUseCase.Callback? = null
     fun loadRecipe() {
         if (recipeId == null) {
             callback?.recipeNotFound()
@@ -59,7 +55,6 @@ class RecipeUseCase @Inject constructor(
                             },
                             {
                                 callback?.onError(it.message ?: "")
-
                             })
         }
 
@@ -68,4 +63,9 @@ class RecipeUseCase @Inject constructor(
     fun navigateUp() {
         homeRoute.start(Data())
     }
+
+    private var callback: RecipeUseCase.Callback? = null
+    private val recipeId = routeData.recipeId?.toInt()
+    private var disposables = CompositeDisposable()
+
 }

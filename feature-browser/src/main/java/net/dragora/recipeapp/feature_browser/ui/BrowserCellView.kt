@@ -17,7 +17,7 @@ import net.dragora.recipeapp.feature_browser.presenter.BrowserPresenter.View.Cel
 
 class BrowserCellView(context: Context) : LokiFrameLayout(context, R.layout.browser_cell) {
 
-    internal fun bind(
+    fun bind(
             viewModel: CellViewModel,
             clickCell: (Int) -> Unit) {
         with(viewModel) {
