@@ -9,7 +9,7 @@ import net.dragora.recipeapp.base.di.ApplicationProvider
  * Created by luigipapino on 18/02/2018.
  */
 abstract class LokiActivity(private val layoutId: Int? = null) : AppCompatActivity(),
-        ApplicationProvider {
+        ApplicationProvider, StringRetriever {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,4 +19,8 @@ abstract class LokiActivity(private val layoutId: Int? = null) : AppCompatActivi
     }
 
     override fun provideApp(): LokiApplication = application as LokiApplication
+
+    override fun getQuantityString(resId: Int, quantity: Int, vararg formatArgs: Any): String {
+        return resources.getQuantityString(resId, quantity, *formatArgs)
+    }
 }

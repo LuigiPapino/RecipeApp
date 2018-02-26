@@ -32,6 +32,8 @@ dependencies {
   api "com.android.support:support-v4:$android_support_version"
   api "com.android.support.constraint:constraint-layout:$android_constraint_layout"
   api "com.android.support:recyclerview-v7:$android_support_version"
+  api "com.android.support:design:$android_support_version"
+
 
   //DAGGER
   api "com.google.dagger:dagger:$dagger_version"

@@ -4,6 +4,7 @@ package net.dragora.recipeapp.base.data.repository
  * Created by luigipapino on 21/02/2018.
  */
 data class RecipeModel(
+        val id: Int,
         val name: String,
         val ingredients: List<IngredientModel>,
         val steps: List<String>,
@@ -11,7 +12,7 @@ data class RecipeModel(
         val imageURL: String,
         val originalURL: String?,
         val difficulty: Difficulty,
-        val totalTimeSeconds: Int
+        val duration: Int
 ) {
     enum class Difficulty { Easy, Medium, Hard }
 }

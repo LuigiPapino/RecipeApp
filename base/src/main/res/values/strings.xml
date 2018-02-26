@@ -1,3 +1,31 @@
 <resources>
   <string name="app_name">Recipe App</string>
+
+
+  <string name="browser_filter_easy">Easy</string>
+  <string name="browser_filter_medium">Medium</string>
+  <string name="browser_filter_hard">Hard</string>
+
+  <string name="browser_filter_duration_to_10min">0 to 10min</string>
+  <string name="browser_filter_duration_to_20min">11 to 20min</string>
+  <string name="browser_filter_duration_more_20min">more 20min</string>
+
+  <string name="browser_cell_ingredients">%s ingredients</string>
+  <string name="browser_cell_minutes">%s minutes</string>
+
+
+  <plurals name="common_hours">
+    <item quantity="one">%s hour</item>
+    <item quantity="other">%s hours</item>
+  </plurals>
+
+  <plurals name="common_minutes">
+    <item quantity="one">%s minute</item>
+    <item quantity="other">%s minutes</item>
+  </plurals>
+
+  <plurals name="common_seconds">
+    <item quantity="one">%s second</item>
+    <item quantity="other">%s seconds</item>
+  </plurals>
 </resources>

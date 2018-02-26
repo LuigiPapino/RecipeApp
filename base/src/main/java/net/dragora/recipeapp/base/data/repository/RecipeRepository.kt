@@ -20,13 +20,13 @@ class RecipeRepository internal constructor(private val recipeApiService: Recipe
     /**
      * Non thread safe
      */
-    fun retrieveRecipes(query: String? = null): Single<List<RecipeModel>> {
+    fun retrieveRecipes(filters: List<RecipeModelFilter>): Single<List<RecipeModel>> {
         val cache = getCachedData()
         if (cache != null) {
-            return Single.just(getModels(query))
+            return Single.just(getModels(filters))
         }
         return Single.create {
-            fetchRecipes(it, query)
+            fetchRecipes(it, filters)
         }
     }
 
@@ -34,20 +34,20 @@ class RecipeRepository internal constructor(private val recipeApiService: Recipe
         return data
     }
 
-    private fun getModels(query: String?): List<RecipeModel> {
-        return data.toModels().filter { it.matchQuery(query) }
+    private fun getModels(filters: List<RecipeModelFilter>): List<RecipeModel> {
+        return data.toModels().filter { it.matchFilters(filters) }
     }
 
     private fun fetchRecipes(
             emitter: SingleEmitter<List<RecipeModel>>,
-            query: String?) {
+            filters: List<RecipeModelFilter>) {
         recipeApiService.getRecipes()
                 .subscribeOn(LokiSchedulers.NETWORK)
                 .observeOn(LokiSchedulers.COMPUTATION)
                 .subscribe(
                         {
                             data = it
-                            emitter.onSuccess(getModels(query))
+                            emitter.onSuccess(getModels(filters))
                         },
                         {
                             Loggy.e(it, TAG)
@@ -57,61 +57,40 @@ class RecipeRepository internal constructor(private val recipeApiService: Recipe
 
     }
 
-    sealed class RetrieveEvent {
-        class Idle : RetrieveEvent()
-        class Fetching : RetrieveEvent()
-        data class Fetched(val data: List<RecipeModel>) : RetrieveEvent()
-        data class FetchError(val message: String) : RetrieveEvent()
-
-    }
-
     class RepositoryException(cause: Throwable) : Exception(cause)
 
     companion object {
 
         private const val TAG = "RecipeRepository"
         private fun List<RecipePayload>?.toModels(): List<RecipeModel> {
-            return this?.map { it.toModel() } ?: emptyList()
+            return this?.mapIndexed { index, it -> it.toModel(index) } ?: emptyList()
         }
 
         /**
          * This is useless at the moment.
          * It's just to protect the presentation layer from changes in the domain layer
          */
-        private fun RecipePayload.toModel(): RecipeModel {
+        private fun RecipePayload.toModel(recipeId: Int): RecipeModel {
             val ingredients =
                     this.ingredients
                             .map { IngredientModel(it.quantity, it.name, it.type) }
             val steps = this.steps
             val timers = this.timers
             val difficulty = when (steps.size) {
-                in 0..3 -> Difficulty.Easy
-                in 4..8 -> Medium
+                in 0..4 -> Difficulty.Easy
+                in 5..6 -> Medium
                 else -> Hard
             }
             val totalTime = this.timers.reduce { acc, i -> acc + i }
 
-            val model = RecipeModel(name, ingredients, steps, timers, imageURL, originalURL,
+            Loggy.d("toModel() steps=${steps.size} duration=$totalTime")
+
+            val model = RecipeModel(recipeId, name, ingredients, steps, timers, imageURL,
+                    originalURL,
                     difficulty, totalTime)
             return model
         }
 
-        private fun RecipeModel.matchQuery(query: String?): Boolean {
-            query ?: return true
-
-            return when {
-                name.contains(query, true) -> true
-                ingredients.any { it.matchQuery(query) } -> true
-                steps.any { it.contains(query, true) } -> true
-                else -> false
-            }
-        }
-
-        private fun IngredientModel.matchQuery(query: String?): Boolean {
-            query ?: return true
-            return this.name.contains(query, true) || this.type.contains(query, true)
-
-        }
-
     }
+
 }

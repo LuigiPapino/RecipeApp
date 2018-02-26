@@ -8,7 +8,7 @@ import net.dragora.recipeapp.feature_browser.presenter.BrowserPresenter.View.Cel
 /**
  * Created by luigipapino on 21/02/2018.
  */
-class BrowserAdapter(clickCell: (Int) -> Unit) :
+class BrowserAdapter(private val clickCell: (Int) -> Unit) :
         BaseQuickAdapter<CellViewModel, BaseViewHolder>(
                 emptyList()) {
 
@@ -22,6 +22,6 @@ class BrowserAdapter(clickCell: (Int) -> Unit) :
 
     override fun convert(helper: BaseViewHolder, item: CellViewModel) {
         val cell = helper.itemView as BrowserCellView
-        cell.bind(item)
+        cell.bind(item, clickCell)
     }
 }

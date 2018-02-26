@@ -1,28 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
     tools:context="net.dragora.recipeapp.feature_browser.ui.BrowserActivity"
     >
 
-  <android.support.v7.widget.Toolbar
-      android:id="@+id/browser_toolbar"
+  <android.support.design.widget.AppBarLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:theme="@style/AppTheme.AppBarOverlay"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/browser_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
-      />
+        app:layout_scrollFlags="scroll|enterAlways"
+        >
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/browser_filter_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_scrollFlags="scroll|enterAlways"
+        >
+      <com.pchmn.materialchips.ChipView
+          android:id="@+id/browser_filter_difficulty"
+
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="8dp"
+          app:avatarIcon="@drawable/browser_filter"
+          app:backgroundColor="@color/colorAccent"
+          app:deletable="true"
+          app:deleteIconColor="@android:color/white"
+          app:labelColor="@android:color/white"
+          tools:label="Easy"
+          />
+
+      <com.pchmn.materialchips.ChipView
+          android:id="@+id/browser_filter_time"
+
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="8dp"
+          app:avatarIcon="@drawable/browser_timer"
+          app:backgroundColor="@color/colorAccent"
+          app:deletable="true"
+          app:deleteIconColor="@android:color/white"
+          app:labelColor="@android:color/white"
+          tools:label="Easy"
+
+          />
+    </LinearLayout>
+  </android.support.design.widget.AppBarLayout>
+
 
   <android.support.v7.widget.RecyclerView
       android:id="@+id/browser_recycler"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/browser_toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
       />
 
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

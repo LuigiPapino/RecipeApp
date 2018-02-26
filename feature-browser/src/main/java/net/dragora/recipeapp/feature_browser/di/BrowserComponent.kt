@@ -2,8 +2,10 @@ package net.dragora.recipeapp.feature_browser.di
 
 import dagger.Component
 import dagger.Module
+import dagger.Provides
 import net.dragora.recipeapp.base.di.BaseInjector
 import net.dragora.recipeapp.base.di.BaseSubComponent
+import net.dragora.recipeapp.base.ui.StringRetriever
 import net.dragora.recipeapp.feature_browser.ui.BrowserActivity
 import javax.inject.Scope
 import kotlin.annotation.AnnotationRetention.RUNTIME
@@ -29,4 +31,8 @@ interface BrowserComponent : BaseInjector<BrowserActivity> {
 @Module
 object BrowserModule {
 
+    @Provides
+    @BrowserScope
+    @JvmStatic
+    fun provideStringRetriever(context: BrowserActivity): StringRetriever = context
 }
