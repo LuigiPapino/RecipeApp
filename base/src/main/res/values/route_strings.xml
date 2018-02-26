@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <string name="route_app_scheme" translatable="false">https</string>
+  <string name="route_app_host_screens" translatable="false">spranga.com</string>
+
+  <string name="route_app_path_recipe" translatable="false">/recipe</string>
+
+</resources>

@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app-installed" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/feature-browser" />
+            <option value="$PROJECT_DIR$/feature-recipe" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

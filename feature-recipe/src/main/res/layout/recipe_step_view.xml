@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:background="@color/grey"
+    >
+
+
+  <TextView
+      android:id="@+id/step_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingBottom="@dimen/recipe_padding_vertical"
+      android:paddingLeft="@dimen/recipe_padding_horizontal"
+      android:paddingRight="@dimen/recipe_padding_horizontal"
+      android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+      tools:text="Helloo"
+      />
+</android.support.constraint.ConstraintLayout>

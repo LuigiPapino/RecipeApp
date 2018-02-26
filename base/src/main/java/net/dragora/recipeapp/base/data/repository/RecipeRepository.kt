@@ -34,6 +34,13 @@ class RecipeRepository internal constructor(
         }
     }
 
+    fun retrieveRecipe(recipeId: Int): Single<RecipeModel> {
+        return retrieveRecipes(emptyList())
+                .map {
+                    it.first { it.id == recipeId }
+                }
+    }
+
     private fun fetchRecipes(
             emitter: SingleEmitter<List<RecipeModel>>,
             filters: List<RecipeModelFilter>) {

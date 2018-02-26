@@ -25,21 +25,6 @@ import javax.inject.Inject
 
 class BrowserActivity : LokiActivity(R.layout.browser_activity), View {
 
-    override fun setFilterChip(type: FilterType, visible: Boolean, text: String) {
-        val view = when (type) {
-            Difficulty -> browser_filter_difficulty
-            Duration -> browser_filter_time
-        }
-        with(view) {
-            visible(visible)
-            label = text
-            setOnDeleteClicked { presenter.onFilterDelete(type) }
-        }
-
-    }
-
-    private var cellsAdapter: BrowserAdapter? = null
-
     @Inject
     internal lateinit var presenter: BrowserPresenter
 
@@ -49,6 +34,16 @@ class BrowserActivity : LokiActivity(R.layout.browser_activity), View {
         DaggerBrowserComponent.builder()
                 .inject(this)
         presenter.init(this)
+    }
+
+    private fun setupView() {
+        setSupportActionBar(browser_toolbar)
+        browser_recycler.layoutManager = GridLayoutManager(this, 2)
+
+        cellsAdapter = BrowserAdapter { presenter.clickCell(it) }
+        cellsAdapter?.bindToRecyclerView(browser_recycler)
+        cellsAdapter?.setEmptyView(R.layout.browser_empty)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -79,18 +74,23 @@ class BrowserActivity : LokiActivity(R.layout.browser_activity), View {
         return true
     }
 
-    private fun setupView() {
-        setSupportActionBar(browser_toolbar)
-        browser_recycler.layoutManager = GridLayoutManager(this, 2)
 
-        cellsAdapter = BrowserAdapter { presenter.clickCell(it) }
-        cellsAdapter?.bindToRecyclerView(browser_recycler)
-        cellsAdapter?.setEmptyView(R.layout.browser_empty)
-
-    }
 
     override fun showCells(cells: List<CellViewModel>) {
         cellsAdapter?.setNewData(cells)
+    }
+
+    override fun setFilterChip(type: FilterType, visible: Boolean, text: String) {
+        val view = when (type) {
+            Difficulty -> browser_filter_difficulty
+            Duration -> browser_filter_time
+        }
+        with(view) {
+            visible(visible)
+            label = text
+            setOnDeleteClicked { presenter.onFilterDelete(type) }
+        }
+
     }
 
     override fun onLoading(isLoading: Boolean) {
@@ -113,4 +113,7 @@ class BrowserActivity : LokiActivity(R.layout.browser_activity), View {
         presenter.destroy()
         super.onDestroy()
     }
+
+    private var cellsAdapter: BrowserAdapter? = null
+
 }

@@ -2,7 +2,7 @@ package net.dragora.recipeapp.feature_browser.presenter
 
 import io.reactivex.Observable
 import net.dragora.recipeapp.base.data.repository.RecipeModel
-import net.dragora.recipeapp.base.tools.Loggy
+import net.dragora.recipeapp.base.route.RecipeRoute
 import net.dragora.recipeapp.base.tools.android.formatMinutesDuration
 import net.dragora.recipeapp.base.tools.rxjava.LokiSchedulers.Companion.COMPUTATION
 import net.dragora.recipeapp.base.tools.rxjava.LokiSchedulers.Companion.MAIN
@@ -21,7 +21,8 @@ import javax.inject.Inject
 @BrowserScope
 class BrowserPresenter @Inject constructor(
         private val usecase: BrowserUseCase,
-        private val res: StringRetriever) :
+        private val res: StringRetriever,
+        private val recipeRoute: RecipeRoute) :
         BrowserUseCase.Callback {
 
     enum class FilterType { Difficulty, Duration }
@@ -149,11 +150,14 @@ class BrowserPresenter @Inject constructor(
         view?.showMessage(message)
     }
 
+    fun clickCell(recipeId: Int) {
+        recipeRoute.start(RecipeRoute.Data().apply {
+            this.recipeId = recipeId.toString()
+        })
+    }
+
     private var lastQuery: String? = null
     private val lastFilterType = mutableMapOf<FilterType, Any>()
     private var view: View? = null
-    fun clickCell(recipeId: Int) {
-        Loggy.d("clickCell $recipeId")
-    }
 
 }

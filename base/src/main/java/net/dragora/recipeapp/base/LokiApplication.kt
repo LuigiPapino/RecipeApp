@@ -29,7 +29,6 @@ class LokiApplication : Application() {
             StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder().detectAll()
                     .penaltyLog()
                     .penaltyFlashScreen()
-                    .penaltyDeathOnNetwork()
                     .build())
 
             val vmPolicyBuilder = StrictMode.VmPolicy.Builder().detectActivityLeaks()

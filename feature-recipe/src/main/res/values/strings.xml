@@ -1,0 +1,7 @@
+<resources>
+
+  <string name="recipe_section_ingredients">Ingredients (%s)</string>
+  <string name="recipe_section_steps">Instructions</string>
+
+
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="net.dragora.recipeapp.feature_recipe">
+
+  <application>
+    <activity android:name=".ui.RecipeActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+
+        <data
+            android:host="@string/route_app_host_screens"
+            android:pathPrefix="@string/route_app_path_recipe"
+            android:scheme="@string/route_app_scheme"/>
+      </intent-filter>
+    </activity>
+  </application>
+
+</manifest>

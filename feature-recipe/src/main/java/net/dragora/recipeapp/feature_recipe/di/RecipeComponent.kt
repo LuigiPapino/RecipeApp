@@ -1,4 +1,4 @@
-package net.dragora.recipeapp.feature_browser.di
+package net.dragora.recipeapp.feature_recipe.di
 
 import dagger.Component
 import dagger.Module
@@ -7,7 +7,7 @@ import net.dragora.recipeapp.base.di.BaseInjector
 import net.dragora.recipeapp.base.di.BaseSubComponent
 import net.dragora.recipeapp.base.route.RecipeRoute
 import net.dragora.recipeapp.base.ui.StringRetriever
-import net.dragora.recipeapp.feature_browser.ui.BrowserActivity
+import net.dragora.recipeapp.feature_recipe.ui.RecipeActivity
 import javax.inject.Scope
 import kotlin.annotation.AnnotationRetention.RUNTIME
 
@@ -17,29 +17,30 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 
 @Scope
 @Retention(RUNTIME)
-annotation class BrowserScope
+annotation class RecipeScope
 
-@BrowserScope
+@RecipeScope
 @Component(
-        modules = [BrowserModule::class],
+        modules = [RecipeModule::class],
         dependencies = [BaseSubComponent::class])
-interface BrowserComponent : BaseInjector<BrowserActivity> {
+interface RecipeComponent : BaseInjector<RecipeActivity> {
 
     @Component.Builder
-    abstract class Builder : BaseInjector.Builder<BrowserActivity>()
+    abstract class Builder : BaseInjector.Builder<RecipeActivity>()
 }
 
 @Module
-object BrowserModule {
+object RecipeModule {
 
     @Provides
-    @BrowserScope
+    @RecipeScope
     @JvmStatic
-    fun provideStringRetriever(context: BrowserActivity): StringRetriever = context
+    fun provideStringRetriever(context: RecipeActivity): StringRetriever = context
 
     @Provides
-    @BrowserScope
+    @RecipeScope
     @JvmStatic
-    fun provideRecipeRoute(context: BrowserActivity): RecipeRoute = RecipeRoute(context)
+    fun provideRouteData(context: RecipeActivity): RecipeRoute.Data = RecipeRoute.Data(
+            context.intent.data)
 
 }

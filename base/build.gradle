@@ -20,6 +20,8 @@ android {
 
 dependencies {
 
+  api 'com.android.support:appcompat-v7:26.1.0'
+  api 'com.android.support.constraint:constraint-layout:1.0.2'
   application project(':app-installed')
   feature project(':feature-browser')
 
@@ -67,4 +69,5 @@ dependencies {
   //LEAK CANARY
   debugApi "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
   releaseApi "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
+  feature project(":feature-recipe")
 }
