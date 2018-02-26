@@ -7,15 +7,18 @@ import net.dragora.recipeapp.base.data.network.RecipePayload
 import net.dragora.recipeapp.base.data.repository.RecipeModel.Difficulty
 import net.dragora.recipeapp.base.data.repository.RecipeModel.Difficulty.Hard
 import net.dragora.recipeapp.base.data.repository.RecipeModel.Difficulty.Medium
+import net.dragora.recipeapp.base.data.repository.RecipeModelStorage.StorageExpired
 import net.dragora.recipeapp.base.tools.Loggy
 import net.dragora.recipeapp.base.tools.rxjava.LokiSchedulers
 
 /**
  * Created by luigipapino on 18/02/2018.
  */
-class RecipeRepository internal constructor(private val recipeApiService: RecipeApiService) {
+class RecipeRepository internal constructor(
+        private val recipeApiService: RecipeApiService,
+        private val storage: RecipeModelStorage) {
 
-    private var data: List<RecipePayload>? = null
+    private var data: List<RecipeModel>? = null
 
     /**
      * Non thread safe
@@ -23,6 +26,7 @@ class RecipeRepository internal constructor(private val recipeApiService: Recipe
     fun retrieveRecipes(filters: List<RecipeModelFilter>): Single<List<RecipeModel>> {
         val cache = getCachedData()
         if (cache != null) {
+            data = cache
             return Single.just(getModels(filters))
         }
         return Single.create {
@@ -30,23 +34,16 @@ class RecipeRepository internal constructor(private val recipeApiService: Recipe
         }
     }
 
-    private fun getCachedData(): List<RecipePayload>? {
-        return data
-    }
-
-    private fun getModels(filters: List<RecipeModelFilter>): List<RecipeModel> {
-        return data.toModels().filter { it.matchFilters(filters) }
-    }
-
     private fun fetchRecipes(
             emitter: SingleEmitter<List<RecipeModel>>,
             filters: List<RecipeModelFilter>) {
         recipeApiService.getRecipes()
                 .subscribeOn(LokiSchedulers.NETWORK)
+                .observeOn(LokiSchedulers.NETWORK)
+                .map { store(it) }
                 .observeOn(LokiSchedulers.COMPUTATION)
                 .subscribe(
                         {
-                            data = it
                             emitter.onSuccess(getModels(filters))
                         },
                         {
@@ -57,11 +54,31 @@ class RecipeRepository internal constructor(private val recipeApiService: Recipe
 
     }
 
+    private fun getCachedData(): List<RecipeModel>? {
+        return try {
+            storage.retrieve()
+        } catch (ex: StorageExpired) {
+            null
+        }
+    }
+
+    private fun getModels(filters: List<RecipeModelFilter>): List<RecipeModel> {
+        return data?.filter { it.matchFilters(filters) } ?: emptyList()
+    }
+
+    private fun store(payload: List<RecipePayload>): List<RecipeModel> {
+        val data = payload.toModels()
+        storage.store(data)
+        this.data = data
+        return data
+    }
+
     class RepositoryException(cause: Throwable) : Exception(cause)
 
     companion object {
 
         private const val TAG = "RecipeRepository"
+
         private fun List<RecipePayload>?.toModels(): List<RecipeModel> {
             return this?.mapIndexed { index, it -> it.toModel(index) } ?: emptyList()
         }
