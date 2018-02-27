@@ -16,12 +16,14 @@ android {
       buildConfigField("String", "BASE_API_URL", '"http://mobile.asosservices.com/"')
     }
   }
+
+  testOptions {
+    unitTests.returnDefaultValues = true
+  }
 }
 
 dependencies {
 
-  api 'com.android.support:appcompat-v7:26.1.0'
-  api 'com.android.support.constraint:constraint-layout:1.0.2'
   application project(':app-installed')
   feature project(':feature-browser')
 
@@ -70,4 +72,13 @@ dependencies {
   debugApi "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
   releaseApi "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
   feature project(":feature-recipe")
+
+  //--------TEST-------
+  testImplementation 'junit:junit:4.12'
+  testImplementation 'org.mockito:mockito-core:2.8.9'
+  testCompile "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
+
+
+
+
 }
