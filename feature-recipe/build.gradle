@@ -18,7 +18,4 @@ dependencies {
   //BaseRecyclerViewAdapter
   implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:$base_recycler_view_version"
 
-
-  testImplementation 'junit:junit:4.12'
-
 }

@@ -18,9 +18,8 @@ dependencies {
   //BaseRecyclerViewAdapter
   implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:$base_recycler_view_version"
 
+  //Material Chips
   implementation "com.github.pchmn:MaterialChipsInput:$material_chips_version"
 
-  testImplementation 'junit:junit:4.12'
-  androidTestImplementation 'com.android.support.test:runner:1.0.1'
-  androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
 }

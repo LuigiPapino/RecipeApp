@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
+import kotlinx.android.synthetic.main.recipe_activity.recipe_collapsing_toolbar
 import kotlinx.android.synthetic.main.recipe_activity.recipe_image
 import kotlinx.android.synthetic.main.recipe_activity.recipe_recycler
 import kotlinx.android.synthetic.main.recipe_activity.recipe_toolbar
@@ -43,8 +44,7 @@ class RecipeActivity : LokiActivity(R.layout.recipe_activity), RecipePresenter.V
     override fun show(viewModel: ViewModel) {
 
         recipe_image.setImageURI(viewModel.imageUri)
-        supportActionBar?.title = viewModel.name
-        title = viewModel.name
+        recipe_collapsing_toolbar.title = viewModel.name
         adapter.setNewData(viewModel.rows)
     }
 
